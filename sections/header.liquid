@@ -10,7 +10,6 @@
   Theme Store optional settings
   - Home page only: only shows on the home page
 {%- endcomment -%}
-<section data-section-id="{{ section.id }}" data-section-type="header">
   {%- if section.settings.announcement_bar_enabled -%}
     <div>
       {%- if section.settings.announcement_bar_home_page_only == false or template.name == 'index' -%}
@@ -24,19 +23,7 @@
       {%- endif -%}
     </div>
   {%- endif -%}
-  </header>
-
-  {% include 'navbar' %}
-</section>
-
-{% if section.settings.logo != blank %}
-  <style>
-    .logo-image {
-      display: block;
-      max-width: {{ section.settings.logo_max_width }}px;
-    }
-  </style>
-{% endif %}
+   {% include 'navbar' %}
 
 {% schema %}
   {
