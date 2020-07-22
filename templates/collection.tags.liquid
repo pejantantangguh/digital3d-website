@@ -1,0 +1,108 @@
+{% paginate collection.products by 12 %}
+
+{% comment %} Breadcrumbs + Hero {% endcomment %}
+    <section class="position-relative dark-overlay py-3 py-lg-7 overflow-hidden" data-parallax="scroll" data-image-src="img/photo/erii-gutierrez-487083-unsplash.jpg" data-speed="0.3" data-position-x="right">
+      <div class="container overlay-content hero hero-page">
+       {% if collection.all_tags.size > 0 %}
+        <ul class="breadcrumb justify-content-center no-border mb-0">
+        {% for tag in collection.all_tags %}
+          <li class="breadcrumb-item"><a class="text-white" href="{{ shop.secure_url }}">Home</a></li>
+          <li class="breadcrumb-item text-white active">{{ tag | link_to_tag: tag }}</li>
+        </ul>
+        {% endfor %}
+       {% endif %}
+        <div class="hero-content pb-5 text-center text-white">
+          <h1 class="hero-heading">{{ collection.title }}</h1>
+          {% if collection.description != blank %}
+            <p class="lead"> {{ collection.description }}
+            </p>
+          {% endif %}                     
+        </div>
+      </div>
+    </section>
+
+
+{% comment %} End Breadcrums + Hero {% endcomment %}
+
+{% comment %} product grid {% endcomment %}
+ <div class="container mt-5">
+  <div class="row">
+  {% include 'sidebar' %}
+    <div class="products-grid col-xl-9 col-lg-8 order-lg-2">
+      <header class="product-grid-header">
+        <div class="mr-3 mb-3">
+            Showing <strong>1-12 </strong>of <strong>158 </strong>products
+        </div>
+        <div class="mr-3 mb-3"><span class="mr-2">Show</span>
+          <a class="product-grid-header-show active" href="#">12 </a>
+          <a class="product-grid-header-show " href="#">24    </a>
+          <a class="product-grid-header-show " href="#">All    </a>
+        </div>
+          <div class="mb-3 d-flex align-items-center">
+            <span class="d-inline-block mr-1">Sort by</span>
+              <select class="custom-select w-auto border-0" name="sort_by" id="sort-by">
+                {% for option in collection.sort_options %}
+                  <option value="{{ option.value }}">{{ option.name }}</option>
+                {% endfor %}
+              </select>
+          </div>
+        </header>
+            <div class="row">
+              {% for product in collection.products %}
+                <div class="col-xl-4 col-sm-6">
+                  <div class="product">
+                    {% if product.featured_image != blank %}
+                      <div class="product-image">
+                        <a href="{{ product.url | within: collection }}">
+                        {% include 'responsive-image' with
+                          image: product.featured_image,
+                          max_width: 700,
+                          max_height: 800
+                        %}
+                        </a>
+                      </div>
+                    {% endif %}
+                    <div class="py-2">
+                      <p class="text-muted text-sm mb-1">{{product.vendor}}</p>
+                      <h3 class="h6 text-uppercase mb-1"><a class="text-dark" href="{{ product.url | within: collection }}">{{ product.title }}</a></h3>
+                      <span class="text-muted">
+                          {% if product.compare_at_price > product.price %}
+                            {% if product.price_varies %}
+                                {%- assign sale_price = product.price | money -%}
+                                {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+                              {% else %}
+                                {{ 'products.product.on_sale' | t }}
+                                {{ product.price | money }}
+                              {% endif %}
+                            
+                            {% else %}
+
+                              {% if product.price_varies %}
+                                {%- assign price = product.price | money -%}
+                                {{ 'products.product.from_text_html' | t: price: price }}
+                              {% else %}
+                                {{ product.price | money }}
+                              {% endif %}
+                            
+                              {% if product.compare_at_price > product.price %}
+                                <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                                <s>{{ product.compare_at_price | money }}</s>
+                              {% endif %}
+                              
+                              {% unless product.available %}
+                                {{ 'products.product.sold_out' | t }}
+                              {% endunless %}
+                          {% endif %}
+                      </span>
+                    </div>
+                  </div>
+                </div>   
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% if paginate.pages > 1 %}
+    {% include 'pagination' %}
+  {% endif %}
+{% endpaginate %}

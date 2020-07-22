@@ -1,8 +1,8 @@
-import jquery from 'jquery';
 import 'popper.js';
 import 'bootstrap';
 
-const $ = jquery;
+
+
     // ------------------------------------------------------- //
     //   Make a sticky navbar on scrolling
     // ------------------------------------------------------ //
@@ -33,4 +33,20 @@ const $ = jquery;
         } else if (stickyNavbar.length > 0) {
             makeItFixed(0);
         }
+    });
+
+    Shopify.queryParams = {};
+    if (location.search.length) {
+    for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) {
+        aKeyValue = aCouples[i].split('=');
+        if (aKeyValue.length > 1) {
+        Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+        }
+    }
+    }
+    $('#sort-by')
+    .val('{{ collection.sort_by | default: collection.default_sort_by | escape }}')
+    .bind('change', function() {
+        Shopify.queryParams.sort_by = $(this).val();
+        location.search = $.param(Shopify.queryParams).replace(/\+/g, '%20');
     });

@@ -3,13 +3,13 @@
 {% comment %} Breadcrumbs + Hero {% endcomment %}
     <section class="position-relative dark-overlay py-3 py-lg-7 overflow-hidden" data-parallax="scroll" data-image-src="img/photo/erii-gutierrez-487083-unsplash.jpg" data-speed="0.3" data-position-x="right">
       <div class="container overlay-content hero hero-page">
-       {% if collection.all_tags.size > 0 %}
+       {% if collection.all_vendors.size > 0 %}
         <ul class="breadcrumb justify-content-center no-border mb-0">
-        {% for tag in collection.all_tags %}
+          {% for product_vendor in collection.all_vendors %}
           <li class="breadcrumb-item"><a class="text-white" href="{{ shop.secure_url }}">Home</a></li>
-          <li class="breadcrumb-item text-white active">{{ tag | link_to_tag: tag }}</li>
+          <li class="breadcrumb-item text-white active"> {{ product_vendor | link_to_vendor }} </li>
+          {% endfor %}  
         </ul>
-        {% endfor %}
        {% endif %}
         <div class="hero-content pb-5 text-center text-white">
           <h1 class="hero-heading">{{ collection.title }}</h1>
@@ -24,9 +24,6 @@
 
 {% comment %} End Breadcrums + Hero {% endcomment %}
 
-  <header role="banner">
-
-  </header>
 
   <div>
     {% for product in collection.products %}
@@ -104,3 +101,21 @@
     {% include 'pagination' %}
   {% endif %}
 {% endpaginate %}
+
+<script>
+Shopify.queryParams = {};
+if (location.search.length) {
+  for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) {
+    aKeyValue = aCouples[i].split('=');
+    if (aKeyValue.length > 1) {
+      Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+    }
+  }
+}
+$('#sort-by')
+  .val('{{ collection.sort_by | default: collection.default_sort_by | escape }}')
+  .bind('change', function() {
+    Shopify.queryParams.sort_by = $(this).val();
+    location.search = $.param(Shopify.queryParams).replace(/\+/g, '%20');
+  });
+</script>
