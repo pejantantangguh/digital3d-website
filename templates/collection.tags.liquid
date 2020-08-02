@@ -27,14 +27,15 @@
 {% comment %} product grid {% endcomment %}
  <div class="container mt-5">
   <div class="row">
-  {% include 'sidebar' %}
-    <div class="products-grid col-xl-9 col-lg-8 order-lg-2">
+  {% comment %} {% include 'sidebar' %} {% endcomment %}
+  {% comment %} Need to add filter here {% endcomment %}
+    <div class="products-grid col-xl-12 col-lg-12">
       <header class="product-grid-header">
         <div class="mr-3 mb-3">
             Showing <strong>1-12 </strong>of <strong>158 </strong>products
         </div>
         <div class="mr-3 mb-3"><span class="mr-2">Show</span>
-          <a class="product-grid-header-show active" href="#">12 </a>
+          <a class="product-grid-header-show active" href="">12 </a>
           <a class="product-grid-header-show " href="#">24    </a>
           <a class="product-grid-header-show " href="#">All    </a>
         </div>

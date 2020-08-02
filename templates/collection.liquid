@@ -24,80 +24,83 @@
 
 {% comment %} End Breadcrums + Hero {% endcomment %}
 
-  <header role="banner">
+{% comment %} product grid {% endcomment %}
+ <div class="container mt-5">
+  <div class="row">
+  {% comment %} {% include 'sidebar' %} {% endcomment %}
+  {% comment %} Need to add filter here {% endcomment %}
+    <div class="products-grid col-xl-12 col-lg-12">
+      <header class="product-grid-header">
+        {% comment %} <div class="mr-3 mb-3">
+            Showing <strong>1-12 </strong>of <strong>158 </strong>products
+        </div>
+        <div class="mr-3 mb-3"><span class="mr-2">Show</span>
+          <a class="product-grid-header-show active" href="#">12 </a>
+          <a class="product-grid-header-show " href="#">24    </a>
+          <a class="product-grid-header-show " href="#">All    </a>
+        </div> {% endcomment %}
+          <div class="mb-3 d-flex align-items-center">
+            <span class="d-inline-block mr-1">Sort by</span>
+              <select class="custom-select w-auto border-0" name="sort_by" id="sort-by">
+                {% for option in collection.sort_options %}
+                  <option value="{{ option.value }}">{{ option.name }}</option>
+                {% endfor %}
+              </select>
+          </div>
+        </header>
+            <div class="row">
+              {% for product in collection.products %}
+                <div class="col-xl-4 col-sm-6">
+                  <div class="product">
+                    {% if product.featured_image != blank %}
+                      <div class="product-image">
+                        <a href="{{ product.url | within: collection }}">
+                        {% include 'responsive-image' with
+                          image: product.featured_image,
+                          max_width: 700,
+                          max_height: 800
+                        %}
+                        </a>
+                      </div>
+                    {% endif %}
+                    <div class="py-2">
+                      <p class="text-muted text-sm mb-1">{{product.vendor}}</p>
+                      <h3 class="h6 text-uppercase mb-1"><a class="text-dark" href="{{ product.url | within: collection }}">{{ product.title }}</a></h3>
+                      <span class="text-muted">
+                          {% if product.compare_at_price > product.price %}
+                            {% if product.price_varies %}
+                                {%- assign sale_price = product.price | money -%}
+                                {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
+                              {% else %}
+                                {{ 'products.product.on_sale' | t }}
+                                {{ product.price | money }}
+                              {% endif %}
+                            
+                            {% else %}
 
-  </header>
-
-  <div>
-    {% for product in collection.products %}
-      <div>
-        {% if product.featured_image != blank %}
-          <a href="{{ product.url | within: collection }}">
-            {% include 'responsive-image' with
-              image: product.featured_image,
-              max_width: 700,
-              max_height: 800
-            %}
-          </a>
-        {% endif %}
-
-        <p>
-          <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
-        </p>
-        <p>
-          {% if product.compare_at_price > product.price %}
-
-            {% if product.price_varies %}
-              {%- assign sale_price = product.price | money -%}
-              {{ 'products.product.on_sale_from_html' | t: price: sale_price }}
-            {% else %}
-              {{ 'products.product.on_sale' | t }}
-              {{ product.price | money }}
-            {% endif %}
-
-          {% else %}
-
-            {% if product.price_varies %}
-              {%- assign price = product.price | money -%}
-              {{ 'products.product.from_text_html' | t: price: price }}
-            {% else %}
-              {{ product.price | money }}
-            {% endif %}
-
-          {% endif %}
-
-          {% if product.compare_at_price > product.price %}
-            <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
-            <s>{{ product.compare_at_price | money }}</s>
-          {% endif %}
-
-          {% unless product.available %}
-            {{ 'products.product.sold_out' | t }}
-          {% endunless %}
-        </p>
-      </div>
-
-    {% else %}
-      {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
-        {% for i in (1..8) %}
-          <a href="#">
-            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
-            {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg placeholder-svg--small' }}
-          </a>
-
-          <p>
-            <a href="#">{{ 'homepage.onboarding.product_title' | t }}</a>
-          </p>
-
-          <p>
-            {{ 1999 | money }}
-          </p>
+                              {% if product.price_varies %}
+                                {%- assign price = product.price | money -%}
+                                {{ 'products.product.from_text_html' | t: price: price }}
+                              {% else %}
+                                {{ product.price | money }}
+                              {% endif %}
+                            
+                              {% if product.compare_at_price > product.price %}
+                                <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+                                <s>{{ product.compare_at_price | money }}</s>
+                              {% endif %}
+                              
+                              {% unless product.available %}
+                                {{ 'products.product.sold_out' | t }}
+                              {% endunless %}
+                          {% endif %}
+                      </span>
+                    </div>
+                  </div>
+                </div>   
         {% endfor %}
-      {% else %}
-        <p>{{ 'collections.general.no_matches' | t }}</p>
-      {% endif %}
-
-    {% endfor %}
+      </div>
+    </div>
   </div>
 
   {% if paginate.pages > 1 %}

@@ -8,7 +8,12 @@
   <link rel="canonical" href="{{ canonical_url }}">
   {% comment %} CustomCSS {% endcomment %}
   {{ 'app.css' | asset_url | stylesheet_tag }}
-
+  {% if template == 'product' %}
+    {{ 'owl.carousel.min.css' | asset_url | stylesheet_tag }}
+    {{ 'ekko-lightbox.css' | asset_url | stylesheet_tag }}
+  {% endif %}
+  
+ 
   {%- if settings.favicon != blank -%}
     <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">
   {%- endif -%}
@@ -67,5 +72,10 @@
   {{ '//use.fontawesome.com/36587c15bf.js' | | script_tag }}
   {{ '//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js' | | script_tag }}
   {{ 'app.js' | asset_url | script_tag }}
+  {% if template == 'product' %}
+    {{ 'owl.carousel.min.js' | asset_url | script_tag }}
+    {{ 'ekko-lightbox.min.js' | asset_url | script_tag }}
+  {% endif %}
+  
 </body>
 </html>

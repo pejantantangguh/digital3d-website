@@ -1,4 +1,4 @@
-<section data-section-id="{{ section.id }}" data-section-type="product" class="product-details">
+<section data-section-id="{{ section.id }}" data-section-type="product">
 
   {%- assign current_variant = product.selected_or_first_available_variant -%}
   {%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
@@ -9,6 +9,15 @@
         hide
       {%- endunless -%}
     {% endcapture %}
+
+    {% include 'responsive-image' with
+      image: image,
+      max_width: 700,
+      max_height: 800,
+      image_attributes: "data-product-featured-image",
+      wrapper_class: wrapper_class,
+      wrapper_attributes: "data-product-image-wrapper",
+    %}
   {% endfor %}
 
   {% if product.images.size > 1 %}

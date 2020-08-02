@@ -1,3 +1,27 @@
-<div class="pagination">
-  {{ paginate | default_pagination }}
-</div>
+<nav class="d-flex justify-content-center mb-5 mt-3" aria-label="page navigation">
+  <ul class="pagination">
+    {% if paginate.previous.is_link  %}
+      <li class="page-item"><a class="page-link" href="{{ paginate.previous.url }}" aria-label="Previous">
+        <span aria-hidden="true">Previous</span>
+        <span class="sr-only">Previous</span></a>
+      </li>
+    {% endif %}
+    <li class="page-item">
+      {% for part in paginate.parts %}
+        {% if part.is_link %}
+            {{ part.title | link_to: part.url | replace: '<a', '<a class="page-link"'}}
+        {% endif %}
+      {% endfor %}
+    </li>
+    {% if paginate.next.is_link  %}
+      <li class="page-item"><a class="page-link" href="{{ paginate.next.url }}" aria-label="Previous">
+        <span aria-hidden="true">{{ paginate.next.title }}</span>
+        <span class="sr-only">{{ paginate.next.title }}</span></a>
+      </li>
+    {% endif %}
+    
+    {% comment %} <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">Prev</span><span class="sr-only">Previous</span></a></li>
+      {{ paginate | default_pagination }}
+    <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">Next</span><span class="sr-only">Next     </span></a></li> {% endcomment %}
+  </ul>
+</nav>
